@@ -4,6 +4,7 @@ import com.lock.lock.dto.UserInformDto;
 import com.lock.lock.exception.NotFoundException;
 import com.lock.lock.model.User;
 import com.lock.lock.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +12,11 @@ import java.util.List;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService ( UserRepository userRepository ) {
+    public UserService ( UserRepository userRepository, PasswordEncoder passwordEncoder ) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> getUsers () {
@@ -29,7 +32,9 @@ public class UserService {
     }
 
     public User createUser (UserInformDto userInformDto) {
-        User newUser = new User(userInformDto.getName(), userInformDto.getEmail(), userInformDto.getPassword());
+        User newUser = new User(userInformDto.getName(), userInformDto.getEmail(), passwordEncoder.encode(userInformDto.getPassword()));
         return this.userRepository.save(newUser);
     }
+
+
 }
