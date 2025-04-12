@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import com.lock.lock.enums.Role;
 
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
